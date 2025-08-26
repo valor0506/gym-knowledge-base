@@ -17,7 +17,7 @@ Includes **AI-powered Q&A** using Gemini API and follows **secure coding practic
 ---
 
 ## 🛠️ Tech Stack
-- **Frontend**: React (TypeScript), TailwindCSS  
+- **Frontend**: HTML,CSS,JavaScript  
 - **Backend**: Django REST Framework  
 - **Database**: PostgreSQL  
 - **AI Integration**: Gemini API (Google) → future HuggingFace/LLMs  
