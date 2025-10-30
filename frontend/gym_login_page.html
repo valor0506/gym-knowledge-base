@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Gym-O-Netics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-off-white: #FAF9F6;
+            --text-primary: #2C2C2C;
+            --text-secondary: #555555;
+            --text-muted: #888888;
+            --accent-blue: #3A86FF;
+            --accent-green: #4CAF50;
+            --card-bg: #FFFFFF;
+            --border-light: #E0E0E0;
+            --shadow-soft: 0 2px 12px rgba(0,0,0,0.08);
+            --shadow-hover: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-off-white);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            box-shadow: var(--shadow-soft);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border-light);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo a {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .welcome-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+
+        .welcome-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .google-btn {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .google-btn:hover {
+            box-shadow: var(--shadow-soft);
+            border-color: var(--accent-blue);
+            transform: translateY(-1px);
+        }
+
+        .google-icon {
+            width: 18px;
+            height: 18px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE3LjY0IDkuMjA0NTVDMTcuNjQgOC41NjYzNiAxNy41ODI3IDcuOTUyNzMgMTcuNDggNy4zNjM2NEg5VjEwLjg0NTVIMTM4OTLTN18xYy04AABGQ4LjU1IDQuNjA5MSA5IDE5IEM1LjczNjM2IDE5IDMuNzM2MzYgMTcuMjIgMi43IDE0Ljg1SDkuMTM2MzZMMjEuNTI3MyAxNC4zNzQ1QzIxLjgxODIgMTMuMjM2NCAyMiAxMS45MTgyIDIyIDkuMjU0NTVGMC41IDEyVjcuNzU0NTZINS4xODYzNkM0LjI1NDU1IDUuNjE4MTggMi44IDE5IDlIMjE9TmMxNS41NDU1IDIgMTYgMy42OTU0NSA5TjEzLjc4NEM5LjI0NTQ1IDEzLjkzNjQgOS41NTQ1NSAxMy45IEM5Ljg0NTQ1IDEzLjkgMTAuMTM2NCAxMy43OTU1IDEwLjQwNDUgMTMuNTk1NVoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTkgMTNDNS41NzI3MyAxMyAyLjc1IDEwLjIyNzMgMi43NSA2LjVDMi43NSAyLjc3MjczIDUuNTc MjczIDAgOSAwQzEwLjc5MDkgMCAxMi4zOTA5IDAuNjI3MjczIDEzLjU3MjcgMS43MzYzNkwxMS4xNTQ1IDMuOTM2MzZDMTAuNDUgMy4yNTQ1NSA5LjcyNzI3IDMgOSAzQzcuMjMxODEgMsA1LjM2MzY0IFNTOCAzLjYzNjM2IDYuNUM1LjM2MzY0IDguMzY4MTggNy4yMzE4MSAxMCA5IDEwWTgyIENmOTMIDEyIDEwTCBDMCBMMTIuNzIzNiAxMEMxMi45MTgyIDkuMzE4MTggMTMgOC40MDkwOSAxMyA3LjVDMTNSMSDcuMDAOTA5IDEyLjgxODIgNi41NDU0NTJ4IDUuODE4MThGOS41IDE4WKJmaWxsPSIjNDI4NUY0Ii8+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8xMTMzXzI2NjUpIj4KPGg0SWQgZPSIgxNC4zNjM2IDZMMTMuNjM2NEM3LjkyNzI3IDQ2MC4xNTQ1CBSQ0NzC1MTMuIDUuNTg5iCnSgzI2Q0Njk0NTUgNGM3LjYzNDQg0DYuOTM2MSA3LjI3MjczIDggNSU4VjUIZmlLbD0iI0VBNDMzNSIvPgqtL2c+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMV8xMTMzXzI2NjUpIj4KPGRlZnM+CjxjbGlwUGF0aCBpZPSJjbGlwMF8xMTNIZDQyNjY1Ij4KPYVuYkVtaWdgNyBI1MSJncmVjdDMgd2lkdGg9In4NXQTWggIGhlaWdodD01IjE4IiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQaXRoPgo8Y2xpcFBhdGggaWRGOWNsaXRGzH4VmOXzUF8xMUJZYzMgMjY2NSI+CjxyZWN0IHB5NHBmbiAJ5JBdDHBgIoJlWo9IlNMYYjIlIcaVsbD0id2hpdGJpI_AYjEcLapAdGg+ClCv2YDZUZwPgo8L2NsLW4tCjwvc3ZnPgo=' );
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-light);
+            z-index: 1;
+        }
+
+        .divider span {
+            background: var(--card-bg);
+            padding: 0 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent-blue);
+        }
+
+        .checkbox-wrapper label {
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .signin-btn {
+            width: 100%;
+            background: var(--text-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .signin-btn:hover {
+            background: #1a1a1a;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .signup-link {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .signup-link a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .remember-forgot {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <a href="index.html">Gym-O-Netics</a>
+        </div>
+        
+        <h2 class="welcome-title">Welcome back</h2>
+        <p class="welcome-subtitle">Please enter your details</p>
+        
+        <button class="google-btn" onclick="signInWithGoogle()">
+            <div class="google-icon"></div>
+            Sign in with Google
+        </button>
+        
+        <div class="divider">
+            <span>or</span>
+        </div>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label class="form-label" for="email">Email address</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    class="form-input" 
+                    placeholder="Enter your email"
+                    required
+                />
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    class="form-input" 
+                    placeholder="Enter your password"
+                    required
+                />
+            </div>
+            
+            <div class="remember-forgot">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="remember" />
+                    <label for="remember">Remember for 30 days</label>
+                </div>
+                <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="signin-btn">
+                Sign in
+            </button>
+        </form>
+        
+        <div class="signup-link">
+            Don't have an account? <a href="#signup">Sign up</a>
+        </div>
+    </div>
+
+    <script>
+        // Google Sign-In function
+        function signInWithGoogle() {
+            // Add loading state
+            const googleBtn = document.querySelector('.google-btn');
+            googleBtn.classList.add('loading');
+            googleBtn.style.position = 'relative';
+            
+            // Simulate Google OAuth flow
+            setTimeout(() => {
+                alert('Google Sign-In integration would be implemented here with Google OAuth 2.0');
+                googleBtn.classList.remove('loading');
+                // In real implementation, you would redirect to Google OAuth
+                // window.location.href = 'https://accounts.google.com/oauth/authorize?...';
+            }, 1500);
+        }
+
+        // Handle regular login form
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            const submitBtn = document.querySelector('.signin-btn');
+            submitBtn.classList.add('loading');
+            submitBtn.style.position = 'relative';
+            submitBtn.textContent = 'Signing in...';
+            
+            // Simulate login API call
+            setTimeout(() => {
+                console.log('Login attempt:', { email, password, remember });
+                alert('Login functionality would connect to your backend API here');
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = 'Sign in';
+                
+                // In real implementation, redirect to dashboard
+                // window.location.href = 'dashboard.html';
+            }, 2000);
+        }
+
+        // Enhanced form validation
+        document.getElementById('email').addEventListener('input', function() {
+            const email = this.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (email && !emailRegex.test(email)) {
+                this.style.borderColor = '#FF6B35';
+            } else {
+                this.style.borderColor = 'var(--border-light)';
+            }
+        });
+
+        // Password strength indicator (basic)
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            
+            if (password.length > 0 && password.length < 6) {
+                this.style.borderColor = '#FF6B35';
+            } else {
+                this.style.borderColor = 'var(--border-light)';
+            }
+        });
+
+        // Focus states
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('.form-label').style.color = 'var(--accent-blue)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.querySelector('.form-label').style.color = 'var(--text-primary)';
+            });
+        });
+    </script>
+</body>
+</html>
