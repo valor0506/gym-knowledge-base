@@ -503,8 +503,8 @@
                 <a href="#supplements">Supplements</a>
             </nav>
             <div class="auth-buttons">
-                <a href="#" class="btn btn-outline">Login</a>
-                <a href="#" class="btn btn-primary">Sign Up</a>
+                <a href="gym_login_page.html" class="btn btn-outline">Login</a>
+                <a href="gym_login_page.html" class="btn btn-primary">Sign Up</a>
             </div>
         </div>
     </header>
@@ -686,11 +686,18 @@
         const GEMINI_API_KEY = "AIzaSyBtGYhq7EATJf7GTr1Yocb24W0rqOxgccU";
         const chatOutput = document.getElementById("chat-output");
 
+        function requireLogin() {
+            if (!localStorage.getItem("access")) {
+                alert("Please log in to use the AI assistant.");
+                window.location.href = "gym_login_page.html";
+                return false;
+            }
+            return true;
+        }
         // Listen for Enter key press
         searchInput.addEventListener('keypress', async (event) => {
             if (event.key === 'Enter') {
-                const query = searchInput.value.trim();
-                if (!query) return;
+                if (!requireLogin()) return;
 
                 // Show chat output if first message
                 if (!chatOutput.classList.contains('active')) {

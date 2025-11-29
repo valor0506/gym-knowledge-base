@@ -355,29 +355,51 @@
         }
 
         // Handle regular login form
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
-            
-            const submitBtn = document.querySelector('.signin-btn');
-            submitBtn.classList.add('loading');
-            submitBtn.style.position = 'relative';
-            submitBtn.textContent = 'Signing in...';
-            
-            // Simulate login API call
-            setTimeout(() => {
-                console.log('Login attempt:', { email, password, remember });
-                alert('Login functionality would connect to your backend API here');
+        async function handleLogin(event) {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const submitBtn = document.querySelector('.signin-btn');
+        submitBtn.classList.add('loading');
+        submitBtn.textContent = 'Signing in...';
+
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/token/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: email,
+                    password: password
+                })
+            });
+
+            if (!response.ok) {
+                alert("Invalid email or password");
                 submitBtn.classList.remove('loading');
                 submitBtn.textContent = 'Sign in';
-                
-                // In real implementation, redirect to dashboard
-                // window.location.href = 'dashboard.html';
-            }, 2000);
+                return;
+            }
+
+            const data = await response.json();
+            // store tokens + username
+            localStorage.setItem("access", data.access);
+            localStorage.setItem("refresh", data.refresh);
+            localStorage.setItem("username", email);
+
+            // Redirect to landing page
+            window.location.href = "gym-o-netics-landing.html";
+
+        } catch (error) {
+            alert("Error connecting to server");
+            console.error(error);
+        } finally {
+            submitBtn.classList.remove('loading');
+            submitBtn.textContent = 'Sign in';
         }
+    }
+
 
         // Enhanced form validation
         document.getElementById('email').addEventListener('input', function() {
